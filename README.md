@@ -1,15 +1,15 @@
 # ECE570-STORM
 
-## STORM Extension: Fact-Checked Article Generation
+## STORM Extension: Fact-Checked Article Verification
 
-This repository extends the original STORM framework with claim verification, semantic trust scoring, and source filtering. It enhances article generation by using only verified, trustworthy information.
+This repository extends the original STORM framework with claim verification, semantic trust scoring, and trust-based source analysis. It enhances traceability and reliability of the information used in generated articles.
 
-## What You’ll Get
+## Features Added
 
-- Semantic similarity + trust score-based claim verification  
-- Automatic `fact_check_log.json` export after each run  
-- Filtered article output using only sources with `trust_score >= 0.5`  
-- Seamless integration with STORM’s research → outline → article pipeline  
+- Claim verification using semantic similarity and domain-based trust metrics  
+- Automatic export of `fact_check_log.json` with trust scores and explanations  
+- Source-level scoring and filtering capability (you receive URL-wise metadata, not a filtered article)  
+- Compatible with STORM’s original pipeline stages: research → outline → article → polish
 
 ## Prerequisites
 
@@ -17,10 +17,10 @@ This repository extends the original STORM framework with claim verification, se
 
 You must provide API access to:
 
-- OpenAI API Key: For GPT-4o model inference  
-- Bing, Brave, Tavily, or Serper API Key: For real-time search results  
+- OpenAI API Key: for GPT-4o model inference  
+- Bing, Brave, Tavily, or Serper API Key: for search queries  
 
-**Cost Warning**: You will likely need to spend at least $5 USD on GPT-4o usage.
+**Cost Warning**: OpenAI GPT-4o usage requires a minimum credit of ~$5 USD.
 
 ## Step 1: Clone STORM Codebase
 
@@ -38,9 +38,9 @@ pip install -r requirements.txt
 pip install sentence-transformers
 ```
 
-## Step 3: Set Your API Keys
+## Step 3: Set API Keys
 
-Use shell environment variables:
+You can set them in your shell using:
 
 ```bash
 export OPENAI_API_KEY="your-openai-key"
@@ -48,7 +48,7 @@ export OPENAI_API_TYPE="openai"
 export BING_SEARCH_API_KEY="your-bing-key"
 ```
 
-Or if using alternatives:
+For alternatives:
 
 ```bash
 export BRAVE_API_KEY="..."
@@ -56,31 +56,31 @@ export SERPER_API_KEY="..."
 export TAVILY_API_KEY="..."
 ```
 
-## Step 4: Add or Replace These Files
+## Step 4: Add These Modified Files
 
-Add or replace the following files inside the STORM repo:
+Replace or add the following files into the STORM repository:
 
 - `knowledge_storm/storm_wiki/modules/claim_verification.py`  
 - `knowledge_storm/storm_wiki/modules/knowledge_curation.py`  
 - `knowledge_storm/storm_wiki/modules/engine.py`  
 - `examples/storm_examples/run_storm_wiki_gpt.py`  
-- `test_claim_verification.py` *(optional test script)*
+- `test_claim_verification.py` *(optional standalone verification tester)*
 
-These files modify STORM to support fact-checking and trust-based article filtering.
+These include the custom functionality for verifying information and generating `fact_check_log.json`.
 
-## Step 5: (Optional) Test Claim Verifier
+## Step 5: Test Claim Verifier (Optional)
 
 ```bash
 python test_claim_verification.py
 ```
 
-This prints:
+You’ll get output showing:
 
-- A trust_score between 0.0 and 1.0  
-- Matched snippet scores  
-- Reasoning for trustworthiness
+- `trust_score`: a float from 0.0 to 1.0  
+- `reason`: explanation for score  
+- `matching_snippets`: evidence retrieved
 
-## Step 6: Run Full Pipeline
+## Step 6: Run the Pipeline
 
 ```bash
 PYTHONPATH=. python examples/storm_examples/run_storm_wiki_gpt.py \
@@ -96,18 +96,21 @@ PYTHONPATH=. python examples/storm_examples/run_storm_wiki_gpt.py \
   --retrieve-top-k 2
 ```
 
-Enter a topic when prompted (e.g., `princeton`, `japan`, `ai safety`).
+Enter a topic when prompted (e.g., `manhattan`, `japan`, `ai ethics`).
 
-## Outputs Per Topic
+## Output (Per Topic)
 
-The following files are created under `.output/<topic>/`:
+Under `.output/<your_topic>/`, you’ll find:
 
-- `conversation_log.json`  
-- `raw_search_results.json`  
-- `fact_check_log.json`  
-- `storm_gen_article.txt`  
-- `storm_gen_article_trusted_only.txt`
+- `conversation_log.json` — Full turn-by-turn information-seeking dialogue  
+- `raw_search_results.json` — Unfiltered source information from retrieval  
+- `fact_check_log.json` — List of claims + associated trusted sources with trust score & reasoning  
+- `storm_gen_article.txt` — Generated article using all curated information  
+- `storm_gen_outline.txt` — Article structure used for writing  
+- `storm_gen_article_polished.txt` — Final version after polishing module
+
+**Note**: While we provide trust scores per URL, we do not generate a filtered article based only on "credible" URLs.
 
 ## Citation
 
-This project builds on the [STORM (NAACL 2024)](https://arxiv.org/abs/2402.14207) framework. Please cite it if you use this work in research.
+This implementation builds on [STORM (NAACL 2024)](https://arxiv.org/abs/2402.14207). Please cite the original work if you use this project for research purposes.
