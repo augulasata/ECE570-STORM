@@ -1,12 +1,24 @@
-# Append this logic after runner finishes to extract and save fact-check log
-try:
-    output_topic_dir = os.path.join(args.output_dir, "_".join(topic.lower().split()))
-    os.makedirs(output_topic_dir, exist_ok=True)
-    verification_output_path = os.path.join(output_topic_dir, "fact_check_log.json")
+# Append this logic right above def main
+from knowledge_storm.storm_wiki.modules import claim_verification
 
-    fact_checks = info_result[1]["fact_checks"]
-    with open(verification_output_path, "w") as f:
-        json.dump(fact_checks, f, indent=2)
-    print(f"[✅] Fact-check results saved to {verification_output_path}")
-except Exception as e:
-    print(f"[⚠️] Failed to export fact-check log: {e}")
+def run_fact_check_pipeline(url_to_info_path, output_path="fact_check_log.json"):
+    with open(url_to_info_path, "r") as f:
+        data = json.load(f)
+
+    fact_check_log = []
+    for url, info_list in data.items():
+        for entry in info_list:
+            claim = entry if isinstance(entry, str) else entry.get("content", "")
+            if not claim.strip():
+                continue
+            result = claim_verification.verify_claim(claim, info_list)
+            fact_check_log.append({
+                "url": url,
+                "claim": claim,
+                "trust_score": None,
+                "reason": result
+            })
+
+    with open(output_path, "w") as f:
+        json.dump(fact_check_log, f, indent=2)
+    print(f"[GOOD] Fact-check results written to {output_path}")
