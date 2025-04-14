@@ -2,7 +2,7 @@
 
 # DEMO VIDEO
 
-https://youtu.be/RJGnKMbXy1A
+https://youtu.be/pHyeTVqKHZA
 
 ## STORM Extension: Fact-Checked Article Verification
 
