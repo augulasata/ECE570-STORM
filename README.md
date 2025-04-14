@@ -9,7 +9,6 @@ This repository extends the original STORM framework with claim verification, se
 - Claim verification using semantic similarity and domain-based trust metrics  
 - Automatic export of `fact_check_log.json` with trust scores and explanations  
 - Source-level scoring and filtering capability (you receive URL-wise metadata, not a filtered article)  
-- Compatible with STORM’s original pipeline stages: research → outline → article → polish
 
 ## Prerequisites
 
@@ -58,7 +57,7 @@ export TAVILY_API_KEY="..."
 
 ## Step 4: Add These Modified Files
 
-Replace or add the following files into the STORM repository:
+Add the code snippets in the corresponding files to the original files in STORM's codebase. 
 
 - `knowledge_storm/storm_wiki/modules/claim_verification.py`  
 - `knowledge_storm/storm_wiki/modules/knowledge_curation.py`  
