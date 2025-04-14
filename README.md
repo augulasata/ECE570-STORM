@@ -2,7 +2,7 @@
 
 ## STORM Extension: Fact-Checked Article Verification
 
-This repository extends the original STORM framework with claim verification, semantic trust scoring, and trust-based source analysis. It enhances traceability and reliability of the information used in generated articles.
+This repository extends the original STORM framework with claim verification, semantic trust scoring, and trust-based source analysis. 
 
 ## Features Added
 
@@ -24,18 +24,15 @@ You must provide API access to:
 ## Step 1: Clone STORM Codebase
 
 ```bash
-git clone https://github.com/stanfordnlp/storm.git
+git clone https://github.com/stanford-oval/storm.git
 cd storm
-```
 
-## Step 2: Setup Python Environment
+# Set up a new Python environment
+conda create -n storm python=3.11
+conda activate storm
 
-```bash
-python3 -m venv venv
-source venv/bin/activate
+# Install dependencies
 pip install -r requirements.txt
-pip install sentence-transformers
-```
 
 ## Step 3: Set API Keys
 
@@ -47,17 +44,11 @@ export OPENAI_API_TYPE="openai"
 export BING_SEARCH_API_KEY="your-bing-key"
 ```
 
-For alternatives:
-
-```bash
-export BRAVE_API_KEY="..."
-export SERPER_API_KEY="..."
-export TAVILY_API_KEY="..."
-```
-
 ## Step 4: Add These Modified Files
 
 Add the code snippets in the corresponding files to the original files in STORM's codebase. 
+
+Note: Please read the comments in each file. 
 
 - `knowledge_storm/storm_wiki/modules/claim_verification.py`  
 - `knowledge_storm/storm_wiki/modules/knowledge_curation.py`  
@@ -66,18 +57,6 @@ Add the code snippets in the corresponding files to the original files in STORM'
 - `test_claim_verification.py` *(optional standalone verification tester)*
 
 These include the custom functionality for verifying information and generating `fact_check_log.json`.
-
-## Step 5: Test Claim Verifier (Optional)
-
-```bash
-python test_claim_verification.py
-```
-
-You’ll get output showing:
-
-- `trust_score`: a float from 0.0 to 1.0  
-- `reason`: explanation for score  
-- `matching_snippets`: evidence retrieved
 
 ## Step 6: Run the Pipeline
 
@@ -112,4 +91,4 @@ Under `.output/<your_topic>/`, you’ll find:
 
 ## Citation
 
-This implementation builds on [STORM (NAACL 2024)](https://arxiv.org/abs/2402.14207). Please cite the original work if you use this project for research purposes.
+This implementation builds on [STORM (NAACL 2024)](https://arxiv.org/abs/2402.14207).
