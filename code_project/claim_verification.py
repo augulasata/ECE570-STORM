@@ -1,4 +1,4 @@
-# Create a this file and copy and paste the below code as a whole 
+# Create this file and copy and paste the below code as a whole 
 
 DOMAIN_TRUST_LEVELS = {
     ".gov": 1.0,
