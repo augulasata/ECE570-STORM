@@ -1,5 +1,9 @@
 # ECE570-STORM
 
+# DEMO VIDEO
+
+https://youtu.be/RJGnKMbXy1A
+
 ## STORM Extension: Fact-Checked Article Verification
 
 This repository extends the original STORM framework with claim verification, semantic trust scoring, and trust-based source analysis. 
